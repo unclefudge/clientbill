@@ -72,7 +72,7 @@
     <div class="flex justify-between items-start mb-10 gap-8">
 
         <div class="text-sm leading-6">
-            <img src="/img/openhands_logo_aqua.png" class="h-16 opacity-90 mb-4" alt="Open Hands">
+            <img src="/img/openhands_logo_aqua.jpg" class="h-16 opacity-90 mb-4" alt="Open Hands">
         </div>
 
         <div class="text-sm text-right leading-6">
