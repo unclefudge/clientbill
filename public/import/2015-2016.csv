@@ -1,0 +1,228 @@
+﻿Cape Cod Hours  2015-2016,,
+,,
+Financial Year Summary,,
+,884,Billed Hours
+,,Discounted Hours
+"$66,300.00 ",884,Total Hours
+,,
+July,,
+1/7/2015,5,company leave
+2/7/2015,1.5,Job Planner - job start
+8/7/2015,11.5,"accident manager + export, planner tabs"
+9/7/2015,3,"planner tabs, front buttons, jo chat"
+15/7/2015,9.5,"Job planner - move job date, tradeplanner - jobstart, close dropdowns, weekly own jobs"
+16/7/2015,3.5,"trade plan allocate job, compliance colours, del inactive users from roster"
+18/7/2015,3,move job start in tradeplan + jobs before
+22/7/2015,6,"fixed moving jobstart + task before, company/user loop, allow 1 jobstart"
+25/7/2015,3.5,database split - data structure
+26/7/2015,2.5,database split - weekly
+27/7/2015,3.5,database split - clean up code
+28/7/2015,5,database split - job planner
+29/7/2015,10,database split - updating db functions
+30/7/2015,10.5,database split - tradeplan
+31/7/2015,1,database split - attendance
+"$5,925.00 ",79,Total hours
+,,
+August,,
+1/8/2015,2.5,database split - attendance
+2/8/2015,5.5,database split - attendance
+3/8/2015,3,"database split - attenance, non_comply cron"
+4/8/2015,0.5,database split - tradeplan
+5/8/2015,4,"database split - tradeplanner, attendance, weekly"
+6/8/2015,2,database split - attendance
+8/8/2015,5,database split - backup + testing
+9/8/2015,2,database split - goLive
+10/8/2015,1,fixing json returns + popup error mesg
+19/8/2015,3,"trade/job planners - reassigning tasks, server php settings"
+20/8/2015,1,preventing duplicate start jobs
+21/8/2015,2,"Job export, code cleaning"
+24/8/2015,1,code cleaning
+26/8/2015,9.5,"Company inactive, deactive, company/job export, upcoming tradeplan, db backup"
+27/8/2015,1,Jo chat + planning
+"$3,225.00 ",43,Total hours
+,,
+September,,
+22/9/2015,5,"fixed daylight saving bug in job planner, deleting company on current day on attendance, fixed various jobstarts"
+23/9/2015,2,chat with Jo. wms/toolbox talks planning
+26/9/2015,9.5,"WMS + Toolbox planning, begun coding WMS"
+27/9/2015,5.5,WMS - creation
+28/9/2015,2.5,"WMS - edit mode, debug jobplan week rows"
+29/9/2015,1.5,Jo chat + debug
+30/9/2015,1.5,WMS
+"$2,062.50 ",27.5,Total hours
+,,
+October,,
+7/10/2015,10.5,WMS - adding + deleting haz/steps
+8/10/2015,7,"WMS - controls, templates"
+15/10/2015,5.5,WMS - templates
+21/10/2015,7,WMS - reports + copy templates
+22/10/2015,3.5,WMS - templates
+28/10/2015,6.5,"WMS - reports (sign off), Web Dev letter"
+29/10/2015,7.5,"WMS - reports, sign off, report mod highlight"
+30/10/2015,1,Jo chat
+"$3,637.50 ",48.5,Total hours
+,,
+November,,
+3/11/2015,1,Jo chat
+4/11/2015,3,"WMS - reports, sign off, stylying"
+5/11/2015,3.5,"Job planner - start date, WMS - cod sign off, buttons"
+6/11/2015,1,generic in daily not logged in
+8/11/2015,2,New WHS System Planning
+10/11/2015,1,New WHS System Planning
+11/11/2015,9,"Job Attendence bug, WMS pdf, New WHS design Planning"
+12/11/2015,7,"wms pdf/email, edit->add, jobplanner bug fix"
+14/11/2015,3,New WHS design Planning
+15/11/2015,3,New WHS design Planning
+16/11/2015,1.5,New WHS design Planning
+18/11/2015,8,"WMS edit mode with apppend, debug job attendance/roster and today add/del, new whs design plan"
+19/11/2015,1,New WHS design Planning
+23/11/2015,1,New whs template design
+28/11/2015,6,New WHS Laravel
+"$3,825.00 ",51,Total hours
+,,
+December,,
+2/12/2015,7,"fusion site, debug attendence/non comply"
+4/12/2015,1,Jo chat + debug non-comply
+7/12/2015,2.5,worksafe site
+9/12/2015,8,*new worksafe site
+11/12/2015,1,"Jo chat, fixing non-compliance"
+12/12/2015,9,worksafe site
+16/12/2015,2.5,worksafe site
+17/12/2015,2,worksafe site
+19/12/2015,4.5,worksafe site
+21/12/2015,2,worksafe system - released for testing
+22/12/2015,9,whs - install laravel
+23/12/2015,7.5,whs - config laravel
+24/12/2015,4,project flyer
+25/12/2015,2,project flyer
+26/12/2015,8,projectflyer - completed
+27/12/2015,12.5,user rego/auth
+28/12/2015,7.5,"sites, bootstrap forms, linked models"
+29/12/2015,5.5,sites/company/users form design + styling
+30/12/2015,6,form style/formatting compies/sites
+31/12/2015,4.5,form table relations trades/companies/sites
+"$7,950.00 ",106,Total hours
+,,
+January,,
+1/1/2016,8.5,ajax datatables
+2/1/2016,3.5,ajax datatables + roles/permission
+3/1/2016,13.5,"html collective, user profile/tabs/routes"
+4/1/2016,9,"fixed user profile tabs, redid forms, installled toatr"
+5/1/2016,10,"installed roles/permissions, pivot tables, parent companies"
+6/1/2016,4,many-to-many company/user models. security list for users/companys
+7/1/2016,4,"datatables, user list authority,"
+9/1/2016,5,"fixed join search DT, actions"
+10/1/2016,6.5,"company profile, staff, unique slug"
+11/1/2016,1,fixing up
+12/1/2016,4.5,"datatables inline edit, trades/tasks"
+13/1/2016,7,"trade/tasks, user photo"
+14/1/2016,1.5,company logo
+27/1/2016,10.5,"trades/tasks, company, git"
+28/1/2016,7,"setup forge/dev server, git"
+"$7,162.50 ",95.5,Total hours
+,,
+Febuary,,
+3/2/2016,5,"test site data, Jo chat"
+4/2/2016,5,WHSdocs
+5/2/2016,5,WHSdocs
+16/2/2016,4,"whsdocs, roles"
+17/2/2016,5.5,vuejs
+18/2/2016,3.5,vuejs
+23/2/2016,9,vuejs trades
+24/2/2016,8,whsdocs
+27/2/2016,4,whsdocs
+29/2/2016,4,whsdocs
+"$3,975.00 ",53,Total hours
+,,
+March,,
+1/3/2016,2.5,whsdocs
+2/3/2016,8,whsdocs
+4/3/2016,3,whsdocs
+8/3/2016,6,"whsdocs, vuejs"
+9/3/2016,6.5,vuejs trades
+10/3/2016,5,vuejs trades
+16/3/2016,8,vuejs trades
+17/3/2016,5,vuejs tasks
+22/3/2016,1,vuejs trades
+23/3/2016,6,vuejs trades
+30/3/2016,6,vuejs tasks
+31/3/2016,10,vuejs trade/task completion
+"$5,025.00 ",67,Total hours
+,,
+April,,
+1/4/2016,4,vuejs iOS debug
+7/4/2016,1,updates old whs
+8/4/2016,1,old whs export
+12/4/2016,3.5,clients/sites
+13/4/2016,3,clients/users
+14/4/2016,5,clients/sites
+15/4/2016,4,sites/company
+16/4/2016,5,sites/clients/company
+17/4/2016,5.5,roles/permissions
+18/4/2016,5,migration
+19/4/2016,1,active login
+20/4/2016,3.5,"ipad vuejs, sites"
+21/4/2016,5,"permissions, migration"
+23/4/2016,5,"planner tables, checkin/dashboard"
+25/4/2016,10,"checkin, dashboard,sites, company parentOfs"
+26/4/2016,5.5,checkin
+28/4/2016,8,dash/sites/company/permissions
+29/4/2016,2.5,redo single parent company
+"$5,812.50 ",77.5,Total hours
+,,
+May,,
+1/5/2016,3,checkin/attendence
+2/5/2016,3,safety issues
+3/5/2016,2,site actions
+4/5/2016,14,site actions + tips vue'ed
+5/5/2016,5.5,Site accidents
+6/5/2016,4.5,Site accidents/ bugs
+7/5/2016,5,"dashboard, generel styling"
+8/5/2016,3,dashboard
+9/5/2016,6.5,migrate data + bug fixes
+10/5/2016,9,code clean + bug fixes
+11/5/2016,2,demo prep
+12/5/2016,8,CC office demo
+13/5/2016,6,CC office demo
+14/5/2016,1,Company leave
+16/5/2016,1,Company leave
+17/5/2016,4,datatables delete module
+18/5/2016,1,roles/permissions
+19/5/2016,2,roles/permissions
+20/5/2016,4,roles/permissions
+21/5/2016,2,roles/permissions
+22/5/2016,2,roles/permissions
+23/5/2016,1,roles/permissions
+24/5/2016,2,roles/permissions
+25/5/2016,5,roles/permissions
+26/5/2016,3,roles/permissions
+27/5/2016,2,roles/permissions
+28/5/2016,5,attendance/compliance
+30/5/2016,5,weekly planner
+31/5/2016,4.5,site planner
+"$8,700.00 ",116,Total hours
+,,
+June,,
+1/6/2016,10.5,site planner
+2/6/2016,2,site planner
+3/6/2016,3.5,site planner
+4/6/2016,9.5,site planner
+6/6/2016,6,site planner
+7/6/2016,5,site planner
+8/6/2016,14,site planner
+9/6/2016,4,site planner
+10/6/2016,5,site planner
+11/6/2016,6.5,site planner
+12/6/2016,5.5,site planner
+13/6/2016,9,site planner
+14/6/2016,1,site planner
+15/6/2016,13,site planner
+16/6/2016,3,site planner
+17/6/2016,2,site planner
+19/6/2016,2,site planner
+20/6/2016,2.5,weekly planner
+21/6/2016,2.5,weekly planner
+22/6/2016,7.5,weekly planner
+30/6/2016,6,weekly planner
+,,
+"$9,000.00 ",120,Total hours

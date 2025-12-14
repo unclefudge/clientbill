@@ -1,0 +1,29 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/**/*';
+@source '../../../../resources/views/filament/**/*';
+@source '../../../../resources/views/livewire/**/*';  /* important - needed to add to make work */
+
+
+/* Improve Filament button text contrast in dark mode */
+.dark .fi-btn {
+    color: rgba(255, 255, 255, 0.85) !important; /* lighter text */
+}
+
+/* Specific tweaks for secondary / gray buttons */
+.dark .fi-btn[data-color="gray"],
+.dark .fi-btn[data-color="secondary"],
+.dark .fi-btn[data-color="danger"],
+.dark .fi-btn[data-color="warning"]{
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Optional: Make icons lighter too */
+.dark .fi-btn svg {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Lists */
+/*ul {
+    @apply list-disc list-inside pl-4 mb-3 space-y-1;
+}*/
