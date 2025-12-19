@@ -87,7 +87,7 @@ class InvoiceBuilderService
             $rate    = $project->rate ?? $client->rate;
 
             $totalMinutes = $rows->sum(function ($entry) {
-                return match ($entry->type) {
+                return match ($entry->entry_type) {
                     'payback' => -1 * $entry->duration,
                     'regular', 'prebill' => $entry->duration,
                     default => 0,
