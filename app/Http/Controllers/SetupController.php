@@ -66,6 +66,11 @@ class SetupController extends Controller
         }
     }
 
+    public function dusty()
+    {
+        return view('dustyroad',);
+    }
+
     public function mail()
     {
         echo "<h1>Testing mail</h1>";

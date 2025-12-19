@@ -84,19 +84,26 @@ class InvoiceBuilderService
 
         foreach ($entries->groupBy('project_id') as $projectId => $rows) {
             $project = $projects->where('id', $projectId)->first();
-            $rate = $project->rate ?? $client->rate;
+            $rate    = $project->rate ?? $client->rate;
 
-            $totalMinutes = $rows->sum('duration');
-            $hours        = round($totalMinutes / 60, 2);
-            $amount       = $hours * $rate;
+            $totalMinutes = $rows->sum(function ($entry) {
+                return match ($entry->type) {
+                    'payback' => -1 * $entry->duration,
+                    'regular', 'prebill' => $entry->duration,
+                    default => 0,
+                };
+            });
+
+            $hours  = round($totalMinutes / 60, 2);
+            $amount = $hours * $rate;
 
             $projectRows[] = [
-                'project_id'     => $projectId,
-                'project_name'   => $project->name,
-                'rate'           => $rate,
-                'qty'            => $hours,
-                'total'          => $amount,
-                'summary_bullets'=> $rows->pluck('summary')->filter()->values(),
+                'project_id'      => $projectId,
+                'project_name'    => $project->name,
+                'rate'            => $rate,
+                'qty'             => $hours,
+                'total'           => $amount,
+                'summary_bullets' => $rows->pluck('summary')->filter()->values(),
             ];
 
             $subtotal += $amount;

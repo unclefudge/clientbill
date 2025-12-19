@@ -18,6 +18,7 @@ use App\Http\Controllers\InvoicePdfController;
 //Route::get('/setup/import0', '\App\Http\Controllers\SetupController@importAll');
 //Route::get('/setup/checkimport', '\App\Http\Controllers\SetupController@checkImport');
 Route::get('/quick', '\App\Http\Controllers\SetupController@quick');
+Route::get('/dusty', '\App\Http\Controllers\SetupController@dusty');
 /*
 |--------------------------------------------------------------------------
 | Authenticated User Routes
