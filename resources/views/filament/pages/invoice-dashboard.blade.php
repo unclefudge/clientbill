@@ -89,7 +89,7 @@
                 $value = $client['unbilled_hours'] ?? 0;
                 $max = 50;
                 $percent = ($value / $max) * 100;
-                $color =$percent < 50 ? 'bg-green-500' : ($percent < 80 ? 'bg-amber-500' : 'bg-red-500');
+                $color = $percent < 50 ? 'bg-green-500' : ($percent < 51 ? 'bg-amber-500' : 'bg-red-500');
             @endphp
 
             @continue($hide)
