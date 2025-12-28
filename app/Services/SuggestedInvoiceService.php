@@ -29,9 +29,7 @@ class SuggestedInvoiceService
             $unbilledHours = 0;
             $entries = TimeEntry::whereIn('project_id', $projectIds)->whereNull('invoice_id')->get(); //->sum('duration') / 60;
             foreach ($entries as $entry) {
-                if ($entry->entry_type == 'payback')
-                    $unbilledHours = $unbilledHours - $entry->duration;
-                else
+                if ($entry->entry_type != 'payback')
                     $unbilledHours = $unbilledHours + $entry->duration;
             }
             $unbilledHours = $unbilledHours / 60;
