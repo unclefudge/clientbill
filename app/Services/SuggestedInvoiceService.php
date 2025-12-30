@@ -58,11 +58,11 @@ class SuggestedInvoiceService
             }
 
             if ($pastRenewalCount > 0) {
-                $suggest = "You have {$renewalCount} unbilled renewals — invoice recommended.";
+                $suggest = "You have {$pastRenewalCount} unbilled renewals — invoice recommended.";
                 $button = 'Invoice';
                 $canInvoice = true;
             } else if ($totalRenewalCount > 0) {
-                $suggest = "Upcoming renewals ({$renewalCount}) — invoice soon.";
+                $suggest = "Upcoming renewals ({$totalRenewalCount}) — invoice soon.";
                 $button = 'Can invoice';
                 $canInvoice = true;
             }
