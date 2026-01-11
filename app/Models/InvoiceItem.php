@@ -39,6 +39,15 @@ class InvoiceItem extends Model
         return $this->hasOneThrough(Project::class, TimeEntry::class, 'id', 'id', 'time_entry_id', 'project_id');
     }
 
+    public function isBillable(): bool
+    {
+        if ($this->type !== 'time') {
+            return true; // hosting, domain, custom
+        }
+
+        return $this->timeEntry?->entry_type !== 'payback';
+    }
+
     protected static function booted()
     {
         static::saving(function (InvoiceItem $item) {

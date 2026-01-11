@@ -70,6 +70,7 @@ class InvoiceDashboard extends Page implements HasSchemas
         // ---------------------------------------------
         $service = app(SuggestedInvoiceService::class);
         $this->suggestions = $service->build($this->upcomingDays);
+        ray($this->suggestions);
 
         // Count number of clients with actionable issues
         $this->alerts = collect($this->suggestions)
@@ -134,7 +135,8 @@ class InvoiceDashboard extends Page implements HasSchemas
             ->map(function ($group) {
                 return [
                     'project_name' => $group->first()->project->name ?? 'Unknown Project',
-                    'total_hours'  => round($group->sum('duration') / 60, 2),
+                    'total_minutes'  => $group->sum('duration'),
+                    'total_hours'  => $group->sum('duration') / 60,
                     'entries'      => $group->map(fn($e) => [
                         'date'      => $e->date,
                         'duration'  => $e->duration,

@@ -43,6 +43,10 @@ class Invoice extends Model
         return $this->hasMany(InvoiceProjectSummary::class);
     }
 
+    public function billableItems()
+    {
+        return $this->items->filter(fn ($i) => $i->isBillable());
+    }
 
     /**
      * Create missing summary records for all projects on this invoice.
@@ -102,13 +106,16 @@ class Invoice extends Model
 
             $bullets = collect(preg_split('/\r\n|\r|\n/', trim((string)$summary)))->filter()->values()->toArray();
             $entryitems = $group['items'];
+            $billableItems = $entryitems->where('type', 'time')->filter(fn ($i) => $i->isBillable());
 
             $items['projects'][] = [
                 'project_id' => $projectId,
                 'project_name' => $group['project_name'],
                 'rate' => $entryitems->first()->rate,
-                'qty' => $entryitems->reduce(fn($carry, $i) => $carry + ($i->rate > 0 ? $i->quantity : -$i->quantity), 0),  // only sums items with postive rate $entryitems->sum('quantity'),
-                'total' => $entryitems->sum(fn($i) => $i->quantity * $i->rate),
+                //'qty' => $entryitems->reduce(fn($carry, $i) => $carry + ($i->rate > 0 ? $i->quantity : -$i->quantity), 0),  // only sums items with postive rate $entryitems->sum('quantity'),
+                //'total' => $entryitems->sum(fn($i) => $i->quantity * $i->rate),
+                'qty'   => $billableItems->sum('quantity'),
+                'total' => $billableItems->sum(fn ($i) => $i->quantity * $i->rate),
                 'summary' => $summary,
                 'summary_bullets' => $bullets,
                 'summary_id' => $summaryRecord->id, // ID of invoice_project_summaries
@@ -214,8 +221,8 @@ class Invoice extends Model
     //
     public function recalculateTotal(): void
     {
-        $subtotal = $this->items()->sum('amount');
-
+        //$subtotal = $this->items()->sum('amount');
+        $subtotal = $this->items->filter(fn ($i) => $i->isBillable())->sum('amount');
         $gst = round($subtotal * 0.10, 2);
         $total = $subtotal + $gst;
 

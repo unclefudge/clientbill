@@ -333,7 +333,7 @@
                         <tbody class="dark:text-gray-400">
                         @foreach ($row['items'] as $item)
                             @if ($item->type == 'time')
-                                <tr class="text-xs hover:bg-gray-50 dark:hover:bg-gray-800 hover:cursor-pointer transition-colors">
+                                <tr class="text-xs hover:bg-gray-50 dark:hover:bg-gray-800 hover:cursor-pointer transition-colors {{ (!$item->isBillable()) ? 'text-red-300' : '' }}">
                                     <td class="w-20 px-3 pl-6 py-1 border-b border-gray-200 dark:border-gray-700">
                                         {{ $item->timeEntry->date->format('M d') }}
                                     </td>

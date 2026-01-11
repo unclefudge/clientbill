@@ -26,13 +26,13 @@ class SuggestedInvoiceService
             $projectIds = $client->projects->pluck('id')->all();
 
             // UNBILLED HOURS
-            $unbilledHours = 0;
+            $unbilledMinutes = 0;
             $entries = TimeEntry::whereIn('project_id', $projectIds)->whereNull('invoice_id')->get(); //->sum('duration') / 60;
             foreach ($entries as $entry) {
                 if ($entry->entry_type != 'payback')
-                    $unbilledHours = $unbilledHours + $entry->duration;
+                    $unbilledMinutes = $unbilledMinutes + $entry->duration;
             }
-            $unbilledHours = $unbilledHours / 60;
+            $unbilledHours = $unbilledMinutes / 60;
 
             // RENEWALS
             $pastDomainRenewals = Domain::forClientRenewingBetween($client->id, $client->lastInvoiceDate(), $today);
@@ -84,13 +84,15 @@ class SuggestedInvoiceService
             $results[] = [
                 'client_id'        => $client->id,
                 'client_name'      => $client->name,
-                'unbilled_hours'   => round($unbilledHours, 2),
+                'unbilled_minutes' => $unbilledMinutes,
+                'unbilled_hours'   => $unbilledHours,
                 'renewals'         => $totalRenewalCount,
-                'hour_balance'     => round($hourBalance, 2),
+                'hour_balance'     => $hourBalance,
                 'hour_balance_label' => $hourBalanceLabel,
                 'suggestion'       => $suggest,
                 'button'           => $button,
                 'can_invoice'      => $canInvoice,
+                'entries'          => $entries->toArray(),
             ];
         }
 

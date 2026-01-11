@@ -14,7 +14,8 @@
                     @foreach (($project['entries'] ?? []) as $entry)
                         @php
                             $date = $entry['date'] ?? null;
-                            $hours = round(($entry['duration'] ?? 0) / 60, 2);
+                            $minutes = ($entry['duration'] ?? 0);
+                            $hours = ($entry['duration'] ?? 0) / 60;
                         @endphp
 
                         <div class="grid grid-cols-12 py-2 px-3 rounded bg-gray-900/40">

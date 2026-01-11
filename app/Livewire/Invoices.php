@@ -490,8 +490,7 @@ class Invoices extends Component implements HasSchemas, HasTable
 //
 // TABLE (Filament list of invoices)
 //
-    public
-    function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->query(Invoice::query())

@@ -88,13 +88,13 @@ class InvoiceBuilderService
 
             $totalMinutes = $rows->sum(function ($entry) {
                 return match ($entry->entry_type) {
-                    'payback' => -1 * $entry->duration,
+                    //'payback' => -1 * $entry->duration,
                     'regular', 'prebill' => $entry->duration,
                     default => 0,
                 };
             });
 
-            $hours  = round($totalMinutes / 60, 2);
+            $hours  = $totalMinutes / 60;
             $amount = $hours * $rate;
 
             $projectRows[] = [
