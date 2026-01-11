@@ -17,7 +17,7 @@
     </style>
 
     {{-- Month Picker --}}
-    <div x-show="dateSelect" wire:ignore
+    <div x-show="dateSelect"
          class="flex justify-between h-64 w-full bg-gray-100 dark:bg-gray-800"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0 scale-90"

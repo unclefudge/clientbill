@@ -138,12 +138,13 @@ class Calendar extends Component implements HasSchemas
         $this->refreshCalendar();
     }
 
-    public function changeYear($year): void
+    public function changeYear($direction): void
     {
-        if ($year === 'prev')
-            $this->selectYear = $this->selectYear - 1;
-        elseif ($year === 'next')
-            $this->selectYear = $this->selectYear + 1;
+        $this->currentMonth = $direction === 'prev'
+            ? $this->currentMonth->subYear()
+            : $this->currentMonth->addYear();
+
+        $this->selectYear = $this->currentMonth->year;
 
         $this->refreshCalendar();
     }
