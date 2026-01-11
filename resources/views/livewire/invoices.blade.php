@@ -32,21 +32,25 @@
                 @if ($view == 'list')
                     <x-filament::button wire:click.stop="openCreateInvoiceModal()" size="sm">Create Invoice</x-filament::button>
                 @else
-                    @if ($activeInvoice && !$activeInvoice->paid_date)
+                    @if ($activeInvoice && $activeInvoice->status == 'draft')
                         <x-filament::button wire:click.stop="markInvoiceSent()" size="sm" color="gray" class="mr-2">
                             <x-heroicon-o-envelope class="w-6 h-6"/>
                             Mark Sent
                         </x-filament::button>
                     @endif
+                    @if ($activeInvoice && $activeInvoice->status == 'sent')
+                        <x-filament::button wire:click.stop="markInvoicePaid()" size="sm" color="gray" class="mr-2">
+                            <x-heroicon-o-currency-dollar class="w-6 h-6"/>
+                            Mark Paid
+                        </x-filament::button>
+                    @endif
                     <x-filament::button wire:click.stop="printInvoice()" size="sm">
                         <x-heroicon-o-printer class="w-6 h-6"/>
-                        Print
                     </x-filament::button>
                     <div x-data x-on:open-print-window.window="window.open($event.detail.url, '_blank')"></div>
 
-                    <x-filament::button size="sm" tag="a" href="{{ route('invoice.pdf', ['invoice' => $activeInvoice->id]) }}" target="_blank">
+                    <x-filament::button size="sm" tag="a" href="{{ route('invoice.pdf', ['invoice' => $activeInvoice->id]) }}" target="_blank" class="mr-2">
                         <x-heroicon-o-arrow-down-tray class="w-6 h-6"/>
-                        Download
                     </x-filament::button>
 
                     <x-filament::button wire:click.stop="confirmDeleteInvoice({{$activeInvoice->id}})" size="sm" color="danger">

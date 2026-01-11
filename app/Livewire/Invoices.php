@@ -277,6 +277,17 @@ class Invoices extends Component implements HasSchemas, HasTable
         Notification::make()->title('Invoice updated')->success()->send();
     }
 
+    public function markInvoicePaid(): void
+    {
+        if ($this->activeInvoice) {
+            $this->activeInvoice->paid_date = $this->today;
+            $this->activeInvoice->status = 'paid';
+            $this->activeInvoice->save();
+            $this->activeInvoice->refresh();
+        }
+        Notification::make()->title('Invoice updated')->success()->send();
+    }
+
 
     public function saveEntry(): void
     {
@@ -510,7 +521,14 @@ class Invoices extends Component implements HasSchemas, HasTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'paid'    => 'success',
+                        'sent'    => 'primary',
+                        'draft'   => 'gray',
+                        'overdue' => 'danger',
+                        default   => 'secondary',
+                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
