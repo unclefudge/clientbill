@@ -345,7 +345,7 @@ class TimeEntry extends Model
                         ->label('Entry Type')
                         ->placeholder('Select duration')
                         ->required()
-                        ->options(['regular' => 'Regular', 'prebill' => 'Prebill', 'payback' => 'Paypack'])
+                        ->options(['regular' => 'Regular', 'prebill' => 'Prebill', 'payback' => 'Payback'])
                         ->native(false)
                         ->selectablePlaceholder(false)
                         ->preload(),
