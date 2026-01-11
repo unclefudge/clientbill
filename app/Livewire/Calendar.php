@@ -334,6 +334,7 @@ class Calendar extends Component implements HasSchemas
         if (!$entry) return;
 
         $entry->delete();
+        $this->activeEntry = null;
         $this->deleteData = [];
 
         $this->refreshCalendar();

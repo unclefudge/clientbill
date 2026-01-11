@@ -1,6 +1,6 @@
 {{-- Edit Entry --}}
 <x-filament::modal id="editEntryModal" width="xl">
-    @if ($activeEntry)
+    @if ($activeEntry && $activeEntry->exists)
         <x-slot name="heading" class="bg-primary-500" style="background: #ff0000"><h1 class="text-2xl md:text-3xl font-bold">Edit Entry <small class="text-gray-500 text-sm">ID: {{ $activeEntry->id }}</small></h1>
             @if ($activeEntry->invoice_id)
                 <div class="text-primary-500">{{ "Invoiced: $activeEntry->invoice_id" }}</div>
