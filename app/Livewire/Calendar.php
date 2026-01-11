@@ -252,7 +252,6 @@ class Calendar extends Component implements HasSchemas
         $data['rate'] = $this->activeEntry->project->rate ?? $this->activeEntry->client->rate;
         $data['start'] = Carbon::parse($this->currentDay->format('Y-m-d') . ' 09:00');
         $data['end']   = $data['start']->copy()->addMinutes((int)$this->timeText * 60);
-        ray($data);
 
         // ---------------------------------------------------------
         // If linked to an invoice → require confirmation
@@ -282,7 +281,7 @@ class Calendar extends Component implements HasSchemas
                     ?? $this->activeEntry->project->rate
                     ?? $this->activeEntry->client->rate;
 
-                $rate = ($this->activeEntry->entry_type != 'payback') ? $rate : $rate * -1;
+                //$rate = ($this->activeEntry->entry_type != 'payback') ? $rate : $rate * -1;
                 $hours = $this->activeEntry->duration / 60;
 
                 if ($invoiceItem->rate != $rate ||
