@@ -36,7 +36,7 @@ class TimeEntryForm
                     ->options([
                         'regular' => 'Regular Work',
                         'prebill' => 'Pre-billed Hours',
-                        'payback' => 'Payback (Internal Only)',
+                        'payback' => 'Payback / Delay',
                     ])
                     ->default('regular')
                     ->required()
