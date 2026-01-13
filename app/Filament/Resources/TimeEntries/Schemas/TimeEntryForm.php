@@ -35,7 +35,7 @@ class TimeEntryForm
                     ->label('Entry Type')
                     ->options([
                         'regular' => 'Regular Work',
-                        'prebill' => 'Pre-billed Hours',
+                        'prebill' => 'Prebill / Claim',
                         'payback' => 'Payback / Delay',
                     ])
                     ->default('regular')
