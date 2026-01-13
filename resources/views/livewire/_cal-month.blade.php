@@ -99,18 +99,18 @@
                             @foreach($entries as $entry)
                                 @php
                                     if ($entry->entry_type == 'payback')
-                                        $entryColour = 'bg-red-700 text-white';
+                                        $entryColour = 'bg-red-200 text-gray-800 dark:bg-red-700 dark:text-white';
                                     elseif ($entry->entry_type == 'prebill')
-                                        $entryColour = 'bg-primary-700 text-white';
+                                        $entryColour = 'bg-primary-200 text-gray-800 dark:bg-primary-700 dark:text-white';
                                     else
-                                        $entryColour = 'text-gray-800 dark:text-gray-200 dark:bg-gray-600';
+                                        $entryColour = 'bg-gray-200 text-gray-800 dark:text-gray-200 dark:bg-gray-600';
 
                                 @endphp
                                 <div class="flex mx-1 rounded-md overflow-hidden shadow hover:cursor-pointer hover:opacity-90 text-xs" wire:click.stop="openEditEntryModal('{{ $entry->id }}')">
                                     <div class="w-8 px-2 py-1 flex items-center justify-center bg-primary-700 text-white dark:bg-primary-900 dark:text-white">
                                         <b>{{ $entry->project->client->code }}</b>
                                     </div>
-                                    <div class="flex flex-grow px-2 py-1 items-center justify-between bg-gray-100 {{ $entryColour  }}">
+                                    <div class="flex flex-grow px-2 py-1 items-center justify-between {{ $entryColour  }}">
                                         <span class="flex-grow truncate">{{ $entry->project->name ?? 'No project' }}</span>
                                         <span class="inline-block w-8 text-right">
                                             {{ ($entry->entry_type == 'payback') ? '-' : '' }}{{ round($entry->duration / 60, 2) }}
