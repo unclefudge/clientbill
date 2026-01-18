@@ -113,6 +113,6 @@ class Domain extends Model
         $now    = now()->startOfDay();
         $future = $now->copy()->addDays($days)->endOfDay();
 
-        return $query->whereNotNull('next_renewal')->whereBetween('next_renewal', [$now, $future]);
+        return $query->where('active', 1)->whereNotNull('next_renewal')->whereBetween('next_renewal', [$now, $future]);
     }
 }
