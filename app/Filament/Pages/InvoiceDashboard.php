@@ -206,7 +206,7 @@ class InvoiceDashboard extends Page implements HasSchemas
     public function createInvoice()
     {
         $data = $this->createForm->getState();
-        ray($data);
+        //ray($data);
 
         if ($data['period'] == 'last_month') {
             $lastmonth = Carbon::now()->timezone('Australia/Tasmania')->subMonth();

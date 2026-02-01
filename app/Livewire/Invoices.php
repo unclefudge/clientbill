@@ -214,6 +214,7 @@ class Invoices extends Component implements HasSchemas, HasTable
     {
         $data = $this->createForm->getState();
 
+        ray('heer');
         if ($data['period'] == 'last_month') {
             $lastmonth = Carbon::now()->timezone('Australia/Tasmania')->subMonth();
             $data['period'] = 'month';
@@ -223,6 +224,8 @@ class Invoices extends Component implements HasSchemas, HasTable
 
         $preview = app(InvoiceBuilderService::class)->preview($data);
         $this->previewJson = base64_encode(json_encode($preview));
+        ray($data);
+        ray($preview);
 
         $this->dispatch('open-modal', id: 'invoicePreviewModal');
 

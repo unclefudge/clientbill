@@ -143,7 +143,7 @@
 
             <div class="col-span-2 text-right">${{ number_format($row['rate'], 0) }}</div>
             <div class="col-span-2 text-right">{{ $row['quantity'] }}</div>
-            <div class="col-span-2 text-right">${{ number_format($row['total'], 2) }}</div>
+            <div class="col-span-2 text-right">${{ number_format($row['amount'], 2) }}</div>
         </div>
     @endforeach
 
