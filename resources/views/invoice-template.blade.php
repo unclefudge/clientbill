@@ -173,7 +173,6 @@
     <!-- PROJECT ITEMS -->
     @foreach ($projectRows as $row)
         <div class="grid grid-cols-12 py-2 border-b text-sm">
-
             <div class="col-span-6">
                 <div class="font-semibold">{{ $row['project_name'] }} Support</div>
 
