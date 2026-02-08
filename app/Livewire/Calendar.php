@@ -104,10 +104,15 @@ class Calendar extends Component implements HasSchemas
 
     public function refreshCalendar(): void
     {
+        $start = $this->currentMonth->copy()->startOfMonth();
+        $end   = $this->currentMonth->copy()->endOfMonth();
+        ray($start);
+        ray($end);
+
         $this->calEntries = $this->getEntriesForMonth();
         $this->calSummary = TimeEntry::getEntrySummary($this->currentMonth);
         $this->calHosting = Hosting::whereMonth('date', $this->currentMonth->month)->where('active', 1)->get();
-        $this->calDomains = Domain::whereMonth('next_renewal', $this->currentMonth->month)->where('active', 1)->get();
+        $this->calDomains = Domain::whereBetween('next_renewal', [$start, $end])->where('active', 1)->get();
         $this->buildCalendar();
         //ray($this->calEntries);
         //ray($this->calSummary);
@@ -401,7 +406,7 @@ class Calendar extends Component implements HasSchemas
                 return $newDate->format('Y-m-d');});
 
         // DOMAINS — recurring every year on same month/day
-        $domains = Domain::whereMonth('next_renewal', $currentMonthNumber)->where('active', 1)->get()->groupBy(function ($entry) use ($currentYear) {
+        $domains = Domain::whereBetween('next_renewal', [$this->calFirstDay, $this->calLastDay])->where('active', 1)->get()->groupBy(function ($entry) use ($currentYear) {
                 $newDate = Carbon::parse($entry->date)->setYear($currentYear);
                 return $newDate->format('Y-m-d');});
 
