@@ -57,7 +57,6 @@
         ? (object) $activeInvoice->client
         : ($activeInvoice->client ?? null);
 
-    @ray($invoiceItems);
     $hostingRows = $invoiceItems['hosting'] ?? [];
     $projectRows = $invoiceItems['projects'] ?? [];
     $domainRow   = $invoiceItems['domains'] ?? [];

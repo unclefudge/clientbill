@@ -145,7 +145,7 @@ class Invoices extends Component implements HasSchemas, HasTable
             $this->activeInvoice->recalculateTotal();
             $this->activeInvoice->refresh();
         }
-        ray($this->invoiceItems);
+        //ray($this->invoiceItems);
     }
 
     public function openInvoice(Invoice $record)
