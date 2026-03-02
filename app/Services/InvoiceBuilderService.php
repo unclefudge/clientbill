@@ -127,10 +127,11 @@ class InvoiceBuilderService
         if ($domains->isNotEmpty()) {
             $min = $domains->min('rate');
             $max = $domains->max('rate');
+            //ray('Domains:', $domains);
 
             $domainRow = [
                 'description' => "Domain Renewals",
-                'summary'     => null,
+                'summary'     => $domains->pluck('name')->toArray(),
                 'rateMin'     => $min,
                 'rateMax'     => $max,
                 'quantity'    => $domains->count(),

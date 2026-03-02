@@ -70,7 +70,7 @@ class InvoiceDashboard extends Page implements HasSchemas
         // ---------------------------------------------
         $service = app(SuggestedInvoiceService::class);
         $this->suggestions = $service->build($this->upcomingDays);
-        ray($this->suggestions);
+        //ray($this->suggestions);
 
         // Count number of clients with actionable issues
         $this->alerts = collect($this->suggestions)

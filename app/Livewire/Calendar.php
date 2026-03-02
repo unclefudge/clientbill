@@ -106,8 +106,6 @@ class Calendar extends Component implements HasSchemas
     {
         $start = $this->currentMonth->copy()->startOfMonth();
         $end   = $this->currentMonth->copy()->endOfMonth();
-        ray($start);
-        ray($end);
 
         $this->calEntries = $this->getEntriesForMonth();
         $this->calSummary = TimeEntry::getEntrySummary($this->currentMonth);

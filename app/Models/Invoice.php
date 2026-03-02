@@ -77,6 +77,7 @@ class Invoice extends Model
         if ($domains->isEmpty())
             $items['domains'] = [];
         else {
+            ray('Domains', $domains);
             $domainNames = $domains->map(fn($i) => $i->domain->name)->all();
             $rates = $domains->pluck('rate')->map(fn($r) => (int)$r);
             // Determine how many years these domain renew for
@@ -93,6 +94,7 @@ class Invoice extends Model
                 'rateMax' => $rates->max(),
                 'summary' => implode("\n", $domainNames),
                 'items' => $domains,
+                'list' => 'list'
             ];
         }
 
