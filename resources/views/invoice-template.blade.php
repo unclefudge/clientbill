@@ -152,13 +152,14 @@
 
     <!-- DOMAIN ROW -->
     @if ($domainRow)
+        @ray($domainRow)
         <div class="grid grid-cols-12 py-2 border-b text-sm">
             <div class="col-span-6">
                 <div class="font-semibold">{{ $domainRow['description'] }}</div>
-                @if (!empty($domainRow['summary']))
+                @if (!empty($domainRow['items']))
                     <ul class="ml-4 mt-1 text-xs text-gray-700 list-disc">
-                        @foreach ($domainRow['summary'] as $b)
-                            <li>{{ $b }}</li>
+                        @foreach ($domainRow['items'] as $domainName)
+                            <li>{{ $domainName }}</li>
                         @endforeach
                     </ul>
                 @endif

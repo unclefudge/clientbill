@@ -127,15 +127,16 @@ class InvoiceBuilderService
         if ($domains->isNotEmpty()) {
             $min = $domains->min('rate');
             $max = $domains->max('rate');
-            //ray('Domains:', $domains);
+            ray('Domains:', $domains);
 
             $domainRow = [
                 'description' => "Domain Renewals",
-                'summary'     => $domains->pluck('name')->toArray(),
+                'summary'     => implode("\n", $domains->pluck('name')->toArray()),
                 'rateMin'     => $min,
                 'rateMax'     => $max,
                 'quantity'    => $domains->count(),
-                'total'       => $domains->sum('rate')
+                'total'       => $domains->sum('rate'),
+                'items'       => 'lll'
             ];
 
             $subtotal += $domainRow['total'];

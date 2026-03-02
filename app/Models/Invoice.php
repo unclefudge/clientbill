@@ -93,8 +93,7 @@ class Invoice extends Model
                 'rateMin' => $rates->min(),
                 'rateMax' => $rates->max(),
                 'summary' => implode("\n", $domainNames),
-                'items' => $domains,
-                'list' => 'list'
+                'items' => $domains->pluck('description')->toArray(),
             ];
         }
 
