@@ -18,7 +18,7 @@ class InvoiceBuilderService
      */
     protected function prepareInvoiceData(array $data): array
     {
-        $client   = Client::with('projects')->findOrFail($data['client_id']);
+        $client = Client::with('projects')->findOrFail($data['client_id']);
         $projects = $client->projects;
         $projectIds = $projects->pluck('id')->all();
 
@@ -32,7 +32,7 @@ class InvoiceBuilderService
             // All unbilled entries (we'll use 2000-01-01)
             case 'unbilled':
                 $start = Carbon::parse('2000-01-01');
-                $end   = $today;
+                $end = $today;
                 break;
 
             // Everything since last invoice
@@ -43,13 +43,13 @@ class InvoiceBuilderService
             // A specific month (great for Cape Cod)
             case 'month':
                 $start = Carbon::create($data['year'], $data['month'], 1);
-                $end   = $start->copy()->endOfMonth();
+                $end = $start->copy()->endOfMonth();
                 break;
 
             // Custom range
             case 'custom':
                 $start = Carbon::parse($data['start']);
-                $end   = Carbon::parse($data['end']);
+                $end = Carbon::parse($data['end']);
                 break;
 
             default:
@@ -63,7 +63,7 @@ class InvoiceBuilderService
         $entries = TimeEntry::with('project')
             ->whereIn('project_id', $projectIds)
             ->whereBetween('date', [$start, $end])
-            ->where(function($q){
+            ->where(function ($q) {
                 $q->whereNull('invoice_id')->orWhere('invoice_id', 0);
             })
             ->where('billable', true)
@@ -80,11 +80,11 @@ class InvoiceBuilderService
         // Build structured invoice rows
         // -------------------------------------------------------------
         $projectRows = [];
-        $subtotal    = 0;
+        $subtotal = 0;
 
         foreach ($entries->groupBy('project_id') as $projectId => $rows) {
             $project = $projects->where('id', $projectId)->first();
-            $rate    = $project->rate ?? $client->rate;
+            $rate = $project->rate ?? $client->rate;
 
             $totalMinutes = $rows->sum(function ($entry) {
                 return match ($entry->entry_type) {
@@ -94,15 +94,15 @@ class InvoiceBuilderService
                 };
             });
 
-            $hours  = $totalMinutes / 60;
+            $hours = $totalMinutes / 60;
             $amount = $hours * $rate;
 
             $projectRows[] = [
-                'project_id'      => $projectId,
-                'project_name'    => $project->name,
-                'rate'            => $rate,
-                'qty'             => $hours,
-                'total'           => $amount,
+                'project_id' => $projectId,
+                'project_name' => $project->name,
+                'rate' => $rate,
+                'qty' => $hours,
+                'total' => $amount,
                 'summary_bullets' => $rows->pluck('summary')->filter()->values(),
             ];
 
@@ -112,12 +112,12 @@ class InvoiceBuilderService
         $hostingRows = [];
         foreach ($hosting as $h) {
             $hostingRows[] = [
-                'id'          => $h->id,
+                'id' => $h->id,
                 'description' => $h->description,
-                'summary'     => $h->summary,
-                'rate'        => $h->rate,
-                'quantity'    => 1,
-                'total'       => $h->rate,
+                'summary' => $h->summary,
+                'rate' => $h->rate,
+                'quantity' => 1,
+                'total' => $h->rate,
             ];
             $subtotal += $h->rate;
         }
@@ -127,39 +127,39 @@ class InvoiceBuilderService
         if ($domains->isNotEmpty()) {
             $min = $domains->min('rate');
             $max = $domains->max('rate');
-            ray('Domains:', $domains);
+            //ray('Domains:', $domains);
 
             $domainRow = [
                 'description' => "Domain Renewals",
-                'summary'     => implode("\n", $domains->pluck('name')->toArray()),
-                'rateMin'     => $min,
-                'rateMax'     => $max,
-                'quantity'    => $domains->count(),
-                'total'       => $domains->sum('rate'),
-                'items'       => 'lll'
+                'summary' => implode("\n", $domains->pluck('name')->toArray()),
+                'summary_bullets' => $domains->pluck('name')->toArray(),
+                'rateMin' => $min,
+                'rateMax' => $max,
+                'quantity' => $domains->count(),
+                'total' => $domains->sum('rate'),
             ];
 
             $subtotal += $domainRow['total'];
         }
 
-        $gst   = round($subtotal * 0.10, 2);
+        $gst = round($subtotal * 0.10, 2);
         $total = round($subtotal + $gst, 2);
 
         return [
-            'client'       => $client,
-            'start'        => $start,
-            'end'          => $end,
-            'items'        => [
+            'client' => $client,
+            'start' => $start,
+            'end' => $end,
+            'items' => [
                 'projects' => $projectRows,
-                'hosting'  => $hostingRows,
-                'domains'  => $domainRow,
+                'hosting' => $hostingRows,
+                'domains' => $domainRow,
             ],
-            'subtotal'     => $subtotal,
-            'gst'          => $gst,
-            'total'        => $total,
-            'hostingModels'=> $hosting,
+            'subtotal' => $subtotal,
+            'gst' => $gst,
+            'total' => $total,
+            'hostingModels' => $hosting,
             'domainModels' => $domains,
-            'projectEntries'=> $entries,
+            'projectEntries' => $entries,
         ];
     }
 
@@ -171,18 +171,18 @@ class InvoiceBuilderService
         $raw = $this->prepareInvoiceData($data);
 
         // Build virtual invoice object
-        $fake          = new \stdClass();
-        $fake->id      = null; // preview → no ID
-        $fake->client  = $raw['client'];
+        $fake = new \stdClass();
+        $fake->id = null; // preview → no ID
+        $fake->client = $raw['client'];
         $fake->issue_date = now();
-        $fake->due_date   = now()->copy()->addDays(7);
-        $fake->subtotal   = $raw['subtotal'];
-        $fake->gst        = $raw['gst'];
-        $fake->total      = $raw['total'];
+        $fake->due_date = now()->copy()->addDays(7);
+        $fake->subtotal = $raw['subtotal'];
+        $fake->gst = $raw['gst'];
+        $fake->total = $raw['total'];
 
         return [
             'invoice' => $fake,
-            'items'   => $raw['items'],
+            'items' => $raw['items'],
         ];
     }
 
@@ -196,10 +196,10 @@ class InvoiceBuilderService
         return DB::transaction(function () use ($raw) {
 
             $invoice = Invoice::create([
-                'client_id'  => $raw['client']->id,
+                'client_id' => $raw['client']->id,
                 'issue_date' => now(),
-                'due_date'   => now()->copy()->addDays(7),
-                'status'     => 'draft',
+                'due_date' => now()->copy()->addDays(7),
+                'status' => 'draft',
             ]);
 
             // Projects (TimeEntries)
@@ -208,12 +208,12 @@ class InvoiceBuilderService
                 $hours = $entry->duration / 60;
 
                 InvoiceItem::create([
-                    'invoice_id'    => $invoice->id,
+                    'invoice_id' => $invoice->id,
                     'time_entry_id' => $entry->id,
-                    'type'          => 'time',
-                    'description'   => $entry->project->name,
-                    'quantity'      => $hours,
-                    'rate'          => $rate,
+                    'type' => 'time',
+                    'description' => $entry->project->name,
+                    'quantity' => $hours,
+                    'rate' => $rate,
                 ]);
 
                 $entry->invoice_id = $invoice->id;
@@ -225,11 +225,11 @@ class InvoiceBuilderService
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
                     'hosting_id' => $h->id,
-                    'type'       => 'hosting',
-                    'description'=> $h->description,
-                    'summary'    => $h->summary,
-                    'quantity'   => 1,
-                    'rate'       => $h->rate,
+                    'type' => 'hosting',
+                    'description' => $h->description,
+                    'summary' => $h->summary,
+                    'quantity' => 1,
+                    'rate' => $h->rate,
                 ]);
 
                 $h->last_renewed = $h->next_renewal;
@@ -241,12 +241,12 @@ class InvoiceBuilderService
             foreach ($raw['domainModels'] as $d) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
-                    'domain_id'  => $d->id,
-                    'type'       => 'domain',
-                    'description'=> $d->name,
-                    'summary'    => $d->summary,
-                    'quantity'   => 1,
-                    'rate'       => $d->rate,
+                    'domain_id' => $d->id,
+                    'type' => 'domain',
+                    'description' => $d->name,
+                    'summary' => $d->summary,
+                    'quantity' => 1,
+                    'rate' => $d->rate,
                 ]);
 
                 $d->last_renewed = $d->next_renewal;

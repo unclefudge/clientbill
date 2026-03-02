@@ -156,10 +156,10 @@
         <div class="grid grid-cols-12 py-2 border-b text-sm">
             <div class="col-span-6">
                 <div class="font-semibold">{{ $domainRow['description'] }}</div>
-                @if (!empty($domainRow['items']))
+                @if (!empty($domainRow['summary_bullets']))
                     <ul class="ml-4 mt-1 text-xs text-gray-700 list-disc">
-                        @foreach ($domainRow['items'] as $domainName)
-                            <li>{{ $domainName }}</li>
+                        @foreach ($domainRow['summary_bullets'] as $b)
+                            <li>{{ $b }}</li>
                         @endforeach
                     </ul>
                 @endif
