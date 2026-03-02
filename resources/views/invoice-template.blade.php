@@ -57,9 +57,10 @@
         ? (object) $activeInvoice->client
         : ($activeInvoice->client ?? null);
 
+    @ray($invoiceItems);
     $hostingRows = $invoiceItems['hosting'] ?? [];
     $projectRows = $invoiceItems['projects'] ?? [];
-    $domainRow   = $invoiceItems['domains'] ?? null;
+    $domainRow   = $invoiceItems['domains'] ?? [];
 
     $subtotal = $activeInvoice->subtotal ?? 0;
     $gst      = $activeInvoice->gst ?? 0;
@@ -165,7 +166,7 @@
             </div>
 
             <div class="col-span-2 text-right">{{ $domainRow['quantity'] }}</div>
-            <div class="col-span-2 text-right">${{ number_format($domainRow['amount'], 2) }}</div>
+            <div class="col-span-2 text-right">${{ number_format($domainRow['total'], 2) }}</div>
         </div>
     @endif
 
