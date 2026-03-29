@@ -66,6 +66,8 @@
     $subtotal = $activeInvoice->subtotal ?? 0;
     $gst      = $activeInvoice->gst ?? 0;
     $total    = $activeInvoice->total ?? 0;
+
+    @ray($invoiceItems);
 @endphp
 
 <div class="min-h-screen flex flex-col relative z-10">
@@ -152,7 +154,7 @@
 
     <!-- DOMAIN ROW -->
     @if ($domainRow)
-        @ray($domainRow)
+        {{--}}@ray($domainRow)--}}
         <div class="grid grid-cols-12 py-2 border-b text-sm">
             <div class="col-span-6">
                 <div class="font-semibold">{{ $domainRow['description'] }}</div>

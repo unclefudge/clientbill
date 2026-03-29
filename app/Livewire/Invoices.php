@@ -399,17 +399,42 @@ class Invoices extends Component implements HasSchemas, HasTable
     {
         $invoice = Invoice::with('items')->find($id);
         if (!$invoice) return;
+        ray($invoice->items);
 
         // Remove invoice_id from any TimeEntries previously associated with deleted Invoice
-        DB::transaction(function () use ($invoice) {
+        /*DB::transaction(function () use ($invoice) {
             // Release time entries
             TimeEntry::whereIn('id', $invoice->items->where('type', 'time')->pluck('time_entry_id')->filter())->update(['invoice_id' => null]);
             $invoice->delete();
+            $this->deleteData = [];
+        });*/
+        DB::transaction(function () use ($invoice) {
+            // Capture affected record IDs before invoice is deleted
+            $timeEntryIds = $invoice->items->where('type', 'time')->pluck('time_entry_id')->filter()->unique()->values();
+            $hostingIds = $invoice->items->where('type', 'hosting')->pluck('hosting_id')->filter()->unique()->values();
+            $domainIds = $invoice->items->where('type', 'domain')->pluck('domain_id')->filter()->unique()->values();
+
+            // Release linked time entries
+            if ($timeEntryIds->isNotEmpty())
+                TimeEntry::whereIn('id', $timeEntryIds)->update(['invoice_id' => null,]);
+
+            // Delete invoice
+            $invoice->delete();
+
+            // Recalculate hosting renewals
+            foreach ($hostingIds as $hostingId)
+                $this->refreshHostingRenewalDates($hostingId);
+
+            // Recalculate domain renewals
+            foreach ($domainIds as $domainId)
+                $this->refreshDomainRenewalDates($domainId);
+
             $this->deleteData = [];
         });
 
         $this->dispatch('close-modal', id: 'deleteInvoiceModal');
         Notification::make()->danger()->title('Invoice deleted')->color('danger')->send();
+
         return redirect('/invoice');
     }
 
@@ -449,6 +474,112 @@ class Invoices extends Component implements HasSchemas, HasTable
         $this->refeshInvoice();
         $this->dispatch('close-modal', id: 'deleteItemModal');
         Notification::make()->danger()->title('Item deleted')->color('danger')->send();
+    }
+
+    protected function refreshHostingRenewalDates(int $hostingId): void
+    {
+        $hosting = Hosting::find($hostingId);
+
+        if (! $hosting) {
+            return;
+        }
+
+        $lastItem = InvoiceItem::query()
+            ->select('invoice_items.*', 'invoices.issue_date')
+            ->join('invoices', 'invoices.id', '=', 'invoice_items.invoice_id')
+            ->where('invoice_items.type', 'hosting')
+            ->where('invoice_items.hosting_id', $hostingId)
+            ->orderByDesc('invoices.issue_date')
+            ->orderByDesc('invoice_items.id')
+            ->first();
+
+        if (! $lastItem || ! $lastItem->issue_date) {
+            $hosting->update([
+                'last_renewed' => null,
+                'next_renewal' => null,
+            ]);
+
+            return;
+        }
+
+        // Keep original month/day, replace only year
+        $anchorDate = $hosting->last_renewed ?? $hosting->next_renewal ?? $hosting->date;
+
+        if (! $anchorDate) {
+            $hosting->update([
+                'last_renewed' => null,
+                'next_renewal' => null,
+            ]);
+
+            return;
+        }
+
+        $anchor = Carbon::parse($anchorDate);
+        $renewalYear = Carbon::parse($lastItem->issue_date)->year;
+
+        $lastRenewed = Carbon::create(
+            $renewalYear,
+            $anchor->month,
+            $anchor->day
+        );
+
+        $hosting->update([
+            'last_renewed' => $lastRenewed->toDateString(),
+            'next_renewal' => $lastRenewed->copy()->addYear()->toDateString(),
+        ]);
+    }
+
+    protected function refreshDomainRenewalDates(int $domainId): void
+    {
+        $domain = Domain::find($domainId);
+
+        if (! $domain) {
+            return;
+        }
+
+        $lastItem = InvoiceItem::query()
+            ->select('invoice_items.*', 'invoices.issue_date')
+            ->join('invoices', 'invoices.id', '=', 'invoice_items.invoice_id')
+            ->where('invoice_items.type', 'domain')
+            ->where('invoice_items.domain_id', $domainId)
+            ->orderByDesc('invoices.issue_date')
+            ->orderByDesc('invoice_items.id')
+            ->first();
+
+        if (! $lastItem || ! $lastItem->issue_date) {
+            $domain->update([
+                'last_renewed' => null,
+                'next_renewal' => null,
+            ]);
+
+            return;
+        }
+
+        $anchorDate = $domain->last_renewed ?? $domain->next_renewal ?? $domain->date;
+
+        if (! $anchorDate) {
+            $domain->update([
+                'last_renewed' => null,
+                'next_renewal' => null,
+            ]);
+
+            return;
+        }
+
+        $anchor = Carbon::parse($anchorDate);
+        $renewalYear = Carbon::parse($lastItem->issue_date)->year;
+        $years = max((int) $domain->renewal, 1);
+
+        $lastRenewed = Carbon::create(
+            $renewalYear,
+            $anchor->month,
+            $anchor->day
+        );
+
+        $domain->update([
+            'last_renewed' => $lastRenewed->toDateString(),
+            'next_renewal' => $lastRenewed->copy()->addYears($years)->toDateString(),
+        ]);
     }
 
     //

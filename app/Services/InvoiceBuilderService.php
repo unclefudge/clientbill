@@ -117,7 +117,7 @@ class InvoiceBuilderService
                 'summary' => $h->summary,
                 'rate' => $h->rate,
                 'quantity' => 1,
-                'total' => $h->rate,
+                'amount' => $h->rate,
             ];
             $subtotal += $h->rate;
         }
