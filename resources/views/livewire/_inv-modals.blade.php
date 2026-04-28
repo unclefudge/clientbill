@@ -26,6 +26,19 @@
     </form>
 </x-filament::modal>
 
+{{-- Invoice Paid --}}
+<x-filament::modal id="invoicePaidModal" width="md">
+    <x-slot name="heading" class="bg-primary-500" style="background: #ff0000"><h1 class="text-2xl md:text-3xl font-bold">Invoice Paid</h1></x-slot>
+    <x-slot name="description"></x-slot>
+    <form>
+        {{ $this->paidForm }}
+        <div class="flex gap-5 mt-5">
+            <x-filament::button wire:click="markInvoicePaid()">Mark Paid</x-filament::button>
+            <x-filament::button color="gray" wire:click="$dispatch('close-modal', { id:'invoicePaidModal' })">Cancel</x-filament::button>
+        </div>
+    </form>
+</x-filament::modal>
+
 {{-- Edit Summary --}}
 <x-filament::modal id="editProjectSummaryModal" width="xl">
     @if ($activeProject)

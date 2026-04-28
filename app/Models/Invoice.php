@@ -604,9 +604,24 @@ class Invoice extends Model
                         ->visible(fn(Get $get) => !in_array($get('type'), ['domain', 'hosting', 'time'])),
 
 
-                    TextInput::make('client_id')
-                        ->visible(false),
 
+
+                ]),
+        ];
+    }
+
+    public static function getInvoicePaidForm(): array
+    {
+        return [
+            Grid::make()
+                ->columns(['sm' => 1, 'md' => 12, 'lg' => 12])
+                ->schema([
+                    DatePicker::make('paid_date')
+                        ->columnSpan(['sm' => 1, 'md' => 12, 'lg' => 12])
+                        ->label('Date Paid')
+                        ->native(false)
+                        ->closeOnDateSelection()
+                        ->required(),
                 ]),
         ];
     }

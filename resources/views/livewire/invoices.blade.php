@@ -39,7 +39,7 @@
                         </x-filament::button>
                     @endif
                     @if ($activeInvoice && $activeInvoice->status == 'sent')
-                        <x-filament::button wire:click.stop="markInvoicePaid()" size="sm" color="gray" class="mr-2">
+                        <x-filament::button wire:click.stop="openInvoicePaidModal()" size="sm" color="gray" class="mr-2">
                             <x-heroicon-o-currency-dollar class="w-6 h-6"/>
                             Mark Paid
                         </x-filament::button>

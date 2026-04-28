@@ -79,6 +79,7 @@ class Invoices extends Component implements HasSchemas, HasTable
     public ?array $entryData = [];
     public ?array $createData = [];
     public ?array $deleteData = [];
+    public ?array $paidData = [];
 
     //public function mount()
     public function mount(Invoice $invoice = null)
@@ -102,6 +103,7 @@ class Invoices extends Component implements HasSchemas, HasTable
         $this->itemForm->fill();
         $this->entryForm->fill();
         $this->createForm->fill();
+        $this->paidForm->fill();
 
         $this->refeshInvoice();
     }
@@ -126,6 +128,11 @@ class Invoices extends Component implements HasSchemas, HasTable
         return $schema->components(Invoice::getItemForm())->statePath('itemData')->model(InvoiceItem::class);
     }
 
+    public function paidForm(Schema $schema): Schema
+    {
+        return $schema->components(Invoice::getInvoicePaidForm())->statePath('paidData')->model(Invoice::class);
+    }
+
     //
     // VIEW SWITCHING
     //
@@ -145,7 +152,7 @@ class Invoices extends Component implements HasSchemas, HasTable
             $this->activeInvoice->recalculateTotal();
             $this->activeInvoice->refresh();
         }
-        ray($this->invoiceItems);
+        //ray($this->invoiceItems);
     }
 
     public function openInvoice(Invoice $record)
@@ -189,6 +196,13 @@ class Invoices extends Component implements HasSchemas, HasTable
         $this->dispatch('open-modal', id: 'createItemModal');
     }
 
+    public function openInvoicePaidModal()
+    {
+        $data['paid_date'] = now()->format('Y-m-d');
+        $this->paidForm->fill($data);
+        $this->dispatch('open-modal', id: 'invoicePaidModal');
+    }
+
     public function openEditProjectSummaryModal($id)
     {
         $this->activeSummary = InvoiceProjectSummary::find($id);
@@ -214,7 +228,6 @@ class Invoices extends Component implements HasSchemas, HasTable
     {
         $data = $this->createForm->getState();
 
-        ray('heer');
         if ($data['period'] == 'last_month') {
             $lastmonth = Carbon::now()->timezone('Australia/Tasmania')->subMonth();
             $data['period'] = 'month';
@@ -224,8 +237,8 @@ class Invoices extends Component implements HasSchemas, HasTable
 
         $preview = app(InvoiceBuilderService::class)->preview($data);
         $this->previewJson = base64_encode(json_encode($preview));
-        ray($data);
-        ray($preview);
+        //ray($data);
+        //ray($preview);
 
         $this->dispatch('open-modal', id: 'invoicePreviewModal');
 
@@ -282,12 +295,11 @@ class Invoices extends Component implements HasSchemas, HasTable
 
     public function markInvoicePaid(): void
     {
-        if ($this->activeInvoice) {
-            $this->activeInvoice->paid_date = $this->today;
-            $this->activeInvoice->status = 'paid';
-            $this->activeInvoice->save();
-            $this->activeInvoice->refresh();
-        }
+        $data = $this->paidForm->getState();
+        $data['status'] = 'paid';
+        $this->activeInvoice->update($data);
+
+        $this->dispatch('close-modal', id: 'invoicePaidModal');
         Notification::make()->title('Invoice updated')->success()->send();
     }
 
