@@ -267,6 +267,17 @@ class Invoice extends Model
 
     }
 
+    public function getInvoiceClientNameAttribute()
+    {
+        if ($this->client_id == 1)
+            return 'CapeCod';
+        if ($this->client_id == 2)
+            return 'AOO';
+        if ($this->client_id == 3)
+            return 'C3';
+        return 'Invoice';
+    }
+
     protected static function booted()
     {
         static::saving(function (Invoice $invoice) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>
-        Invoice {{ isset($activeInvoice->id) && $activeInvoice->id ? str_pad($activeInvoice->id, 5, '0', STR_PAD_LEFT) : 'PREVIEW' }}
+        {{ isset($activeInvoice->id) && $activeInvoice->id ? $activeInvoice->invoiceClientName : '' }} {{ isset($activeInvoice->id) && $activeInvoice->id ? str_pad($activeInvoice->id, 5, '0', STR_PAD_LEFT) : 'PREVIEW' }}
     </title>
 
     <script src="https://cdn.tailwindcss.com"></script>
