@@ -25,9 +25,11 @@ class ProjectForm
                     ->required(),
                 TextInput::make('rate')
                     ->columnSpan(['sm' => 1, 'md' => 4, 'lg' => 4])
-                    ->label('Cost')
+                    ->label('Override rate')
+                    ->helperText('Leave blank to use the client’s default rate.')
+                    ->prefix('$')
                     ->numeric()
-                    ->required(),
+                    ->nullable(),
                 Textarea::make('description')
                     ->columnSpanFull(),
             ]);

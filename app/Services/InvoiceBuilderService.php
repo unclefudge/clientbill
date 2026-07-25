@@ -84,7 +84,7 @@ class InvoiceBuilderService
 
         foreach ($entries->groupBy('project_id') as $projectId => $rows) {
             $project = $projects->where('id', $projectId)->first();
-            $rate = $project->rate ?? $client->rate;
+            $rate = $rows->first()->rate ?? $project->rate ?? $client->rate;
 
             $totalMinutes = $rows->sum(function ($entry) {
                 return match ($entry->entry_type) {
