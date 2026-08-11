@@ -187,6 +187,19 @@ class InvoiceBuilderService
     }
 
     /**
+     * Determine whether the selected client and billing period contains
+     * anything that will be added to the invoice automatically.
+     */
+    public function hasBillableItems(array $data): bool
+    {
+        $raw = $this->prepareInvoiceData($data);
+
+        return $raw['projectEntries']->isNotEmpty()
+            || $raw['hostingModels']->isNotEmpty()
+            || $raw['domainModels']->isNotEmpty();
+    }
+
+    /**
      * CREATE INVOICE — actual DB writes.
      */
     public function create(array $data): Invoice

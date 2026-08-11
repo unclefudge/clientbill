@@ -203,7 +203,7 @@ class InvoiceDashboard extends Page implements HasSchemas
         $this->dispatch('open-modal', id: 'invoicePreviewModal');
     }
 
-    public function createInvoice()
+    public function createInvoice(bool $allowEmpty = false)
     {
         $data = $this->createForm->getState();
         //ray($data);
@@ -215,8 +215,17 @@ class InvoiceDashboard extends Page implements HasSchemas
             $data['year'] = $lastmonth->format('Y');
         }
 
-        $invoice = app(InvoiceBuilderService::class)->create($data);
+        $builder = app(InvoiceBuilderService::class);
 
+        if (!$allowEmpty && !$builder->hasBillableItems($data)) {
+            $this->dispatch('open-modal', id: 'confirmEmptyInvoiceModal');
+
+            return;
+        }
+
+        $invoice = $builder->create($data);
+
+        $this->dispatch('close-modal', id: 'confirmEmptyInvoiceModal');
         $this->dispatch('close-modal', id: 'invoicePreviewModal');
         $this->dispatch('close-modal', id: 'createInvoiceModal');
         Notification::make()->success()->title("Invoice created")->send();

@@ -109,6 +109,25 @@
     </form>
 </x-filament::modal>
 
+{{-- Confirm Empty Invoice --}}
+<x-filament::modal id="confirmEmptyInvoiceModal" width="md">
+    <x-slot name="heading">Create an empty invoice?</x-slot>
+
+    <p class="text-sm text-gray-600 dark:text-gray-300">
+        There are no unbilled time entries, hosting renewals or domain renewals for this client and billing period.
+        You can still create the invoice and add a one-off invoice item afterwards.
+    </p>
+
+    <x-slot name="footerActions">
+        <x-filament::button color="warning" wire:click="createInvoice(true)">
+            Create Empty Invoice
+        </x-filament::button>
+        <x-filament::button color="gray" wire:click="$dispatch('close-modal', { id: 'confirmEmptyInvoiceModal' })">
+            Cancel
+        </x-filament::button>
+    </x-slot>
+</x-filament::modal>
+
 {{-- Preview Modal --}}
 <x-filament::modal id="invoicePreviewModal" width="7xl" slide-over>
     <x-slot name="heading">Invoice Preview</x-slot>

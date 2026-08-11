@@ -245,7 +245,7 @@ class Invoices extends Component implements HasSchemas, HasTable
         //return redirect()->route('invoice.preview', ['previewData' => base64_encode(json_encode($preview)),]);
     }
 
-    public function createInvoice()
+    public function createInvoice(bool $allowEmpty = false)
     {
         $data = $this->createForm->getState();
 
@@ -262,12 +262,22 @@ class Invoices extends Component implements HasSchemas, HasTable
             $data['month'] = $month->format('Y-m-d');
         }
 
-        $client = Client::with('projects')->findOrFail($data['client_id']);
-        //$result = app(InvoiceBuilderService::class)->build($data, $client, saveInvoice: true);
+        $builder = app(InvoiceBuilderService::class);
 
+        if (!$allowEmpty && !$builder->hasBillableItems($data)) {
+            $this->dispatch('open-modal', id: 'confirmEmptyInvoiceModal');
+
+            return;
+        }
+
+        $invoice = $builder->create($data);
+
+        $this->dispatch('close-modal', id: 'confirmEmptyInvoiceModal');
+        $this->dispatch('close-modal', id: 'invoicePreviewModal');
+        $this->dispatch('close-modal', id: 'createInvoiceModal');
         Notification::make()->success()->title("Invoice created")->send();
 
-        //return redirect("/invoice/" . $result['invoice']->id);
+        return redirect("/invoice/" . $invoice->id);
     }
 
     public function saveProjectSummary(): void
@@ -699,4 +709,3 @@ class Invoices extends Component implements HasSchemas, HasTable
             ]);
     }
 }
-
