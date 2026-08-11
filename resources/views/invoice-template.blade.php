@@ -60,6 +60,7 @@
     $hostingRows = $invoiceItems['hosting'] ?? [];
     $projectRows = $invoiceItems['projects'] ?? [];
     $domainRow   = $invoiceItems['domains'] ?? [];
+    $customRows  = $invoiceItems['custom'] ?? [];
 
     // @ray($invoiceItems);
 
@@ -199,6 +200,30 @@
             <div class="col-span-2 text-right">${{ number_format($row['rate'], 0) }}/hr</div>
             <div class="col-span-2 text-right">{{ $row['qty'] }}</div>
             <div class="col-span-2 text-right">${{ number_format($row['total'], 2) }}</div>
+        </div>
+    @endforeach
+
+
+    <!-- CUSTOM ITEMS -->
+    @foreach ($customRows as $row)
+        <div class="grid grid-cols-12 py-2 border-b text-sm">
+            <div class="col-span-6">
+                <div class="font-semibold">{{ $row['description'] }}</div>
+
+                @if (!empty($row['summary']))
+                    <ul class="ml-4 mt-1 text-xs text-gray-700 list-disc">
+                        @foreach (preg_split('/\r\n|\r|\n/', trim((string) $row['summary'])) as $line)
+                            @if (strlen(trim($line)))
+                                <li>{{ trim($line) }}</li>
+                            @endif
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+
+            <div class="col-span-2 text-right">${{ number_format($row['rate'], 0) }}</div>
+            <div class="col-span-2 text-right">{{ number_format($row['quantity'], 0) }}</div>
+            <div class="col-span-2 text-right">${{ number_format($row['amount'], 2) }}</div>
         </div>
     @endforeach
 
