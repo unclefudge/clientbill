@@ -17,16 +17,24 @@
             <div class="text-lg font-semibold text-gray-950 dark:text-white">Books</div>
 
             @if ($businesses->count() > 1)
-                <div class="w-64">
-                    <x-books.select
-                        model="businessId"
-                        :value="$businessId"
-                        :options="$businesses->pluck('name', 'id')->all()"
-                        placeholder="Select business"
-                    />
-                </div>
+                <x-filament::dropdown placement="bottom-start" teleport>
+                    <x-slot name="trigger">
+                        <button type="button" class="flex items-center gap-1 px-2 py-2 text-sm font-semibold text-gray-600 transition hover:text-gray-950 dark:text-gray-300 dark:hover:text-white">
+                            {{ $businesses->firstWhere('id', (int) $businessId)?->name ?? 'Select business' }}
+                            <x-heroicon-m-chevron-down class="h-4 w-4" />
+                        </button>
+                    </x-slot>
+
+                    <x-filament::dropdown.list>
+                        @foreach ($businesses as $business)
+                            <x-filament::dropdown.list.item wire:click="$set('businessId', {{ $business->id }})" :icon="(int) $businessId === (int) $business->id ? 'heroicon-m-check' : null">
+                                {{ $business->name }}
+                            </x-filament::dropdown.list.item>
+                        @endforeach
+                    </x-filament::dropdown.list>
+                </x-filament::dropdown>
             @else
-                <div class="rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 dark:bg-white/5 dark:text-gray-200">
+                <div class="px-2 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300">
                     {{ $businesses->first()?->name }}
                 </div>
             @endif
@@ -35,9 +43,7 @@
 
     <div class="flex flex-wrap items-center gap-x-1 gap-y-2">
         @foreach ($links as $link)
-            <a
-                href="{{ $link['url'] }}"
-                wire:navigate
+            <a href="{{ $link['url'] }}" wire:navigate
                 @class([
                     'border-b-2 px-3 py-2 text-sm font-semibold transition',
                     'border-primary-500 text-primary-600 dark:text-primary-400' => $link['active'],
@@ -50,8 +56,7 @@
 
         <x-filament::dropdown placement="bottom-start">
             <x-slot name="trigger">
-                <button
-                    type="button"
+                <button type="button"
                     @class([
                         'flex items-center gap-1 border-b-2 px-3 py-2 text-sm font-semibold transition',
                         'border-primary-500 text-primary-600 dark:text-primary-400' => $moreActive,
