@@ -20,6 +20,11 @@ use BackedEnum;
 
 class InvoiceDashboard extends Page implements HasSchemas
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     use InteractsWithSchemas;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;

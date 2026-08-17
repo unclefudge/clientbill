@@ -13,6 +13,11 @@ use UnitEnum;
 
 class FinancialSummary extends Page
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
     protected static ?string $navigationLabel = 'Financial Summary';
     protected static UnitEnum|string|null $navigationGroup = 'Admin';

@@ -16,6 +16,11 @@ use Filament\Tables\Table;
 
 class InvoiceItemResource extends Resource
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static ?string $model = InvoiceItem::class;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static ?string $recordTitleAttribute = 'description';

@@ -22,6 +22,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Route;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -48,6 +49,26 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 \Filament\View\PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
                 fn () => view('filament.hooks.hide-login-brand')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_START,
+                fn () => auth()->check()
+                    ? view('filament.hooks.user-theme-head', [
+                        'themeMode' => auth()->user()->theme_mode ?: 'system',
+                    ])
+                    : view('filament.hooks.login-theme-head')
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::BODY_END,
+                fn () => auth()->check()
+                    ? Blade::render("@livewire('user-theme-preference')")
+                    : ''
+            )
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::PAGE_START,
+                fn () => auth()->user()?->canAccessBooks() && $this->isBooksUiRequest()
+                    ? view('filament.hooks.books-navigation')
+                    : ''
             )
             ->login(\App\Filament\Pages\Login::class)
             ->profile(EditProfile::class)
@@ -88,5 +109,28 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css');
+    }
+
+    /**
+     * Filament/Livewire actions are posted to /livewire/update, so checking only
+     * request()->is('books*') makes the Books sub-navigation disappear after
+     * an in-page Livewire update (for example, closing a transaction modal).
+     * Fall back to the referring page for those requests.
+     */
+    protected function isBooksUiRequest(): bool
+    {
+        if (request()->is('books') || request()->is('books/*')) {
+            return true;
+        }
+
+        $referer = request()->headers->get('referer');
+
+        if (! $referer) {
+            return false;
+        }
+
+        $path = trim((string) parse_url($referer, PHP_URL_PATH), '/');
+
+        return $path === 'books' || str_starts_with($path, 'books/');
     }
 }

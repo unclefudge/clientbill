@@ -17,6 +17,11 @@ use Filament\Tables\Table;
 
 class TimeEntryResource extends Resource
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static ?string $model = TimeEntry::class;
     protected static ?string $recordTitleAttribute = 'activity';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;

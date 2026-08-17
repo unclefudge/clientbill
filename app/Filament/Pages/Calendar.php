@@ -9,6 +9,11 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class Calendar extends Page
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected string $view = 'filament.pages.calendar';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
     protected static ?int $navigationSort = 2;

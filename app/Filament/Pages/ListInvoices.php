@@ -8,6 +8,11 @@ use Filament\Support\Icons\Heroicon;
 
 class ListInvoices extends Page
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected string $view = 'filament.pages.invoice-list';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCurrencyDollar;
     protected static ?int $navigationSort = 3;

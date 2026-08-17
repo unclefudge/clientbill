@@ -9,6 +9,11 @@ use Illuminate\Contracts\Support\Htmlable;
 class ViewInvoice extends Page
 {
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
+
     protected string $view = 'filament.pages.invoice-view';
     protected static ?string $slug = 'invoice/{invoice}';
     protected static bool $shouldRegisterNavigation = false;

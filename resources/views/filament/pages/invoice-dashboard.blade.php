@@ -67,6 +67,10 @@
 
             </div>
         </x-filament::card>
+
+        @if (auth()->user()?->canAccessBooks())
+            <livewire:books-dashboard-widget />
+        @endif
     </div>
 
 

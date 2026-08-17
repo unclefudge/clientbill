@@ -18,6 +18,11 @@ use Filament\Tables\Table;
 
 class HostingResource extends Resource
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static ?string $model = Hosting::class;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;
     protected static UnitEnum|string|null $navigationGroup = 'Admin';

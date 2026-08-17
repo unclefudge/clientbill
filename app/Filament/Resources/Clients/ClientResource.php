@@ -17,6 +17,11 @@ use Filament\Tables\Table;
 
 class ClientResource extends Resource
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static ?string $model = Client::class;
     protected static ?string $recordTitleAttribute = 'name';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;

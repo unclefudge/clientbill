@@ -60,6 +60,21 @@ return [
             'report' => false,
         ],
 
+        // Private DigitalOcean Spaces storage for Books source documents and BAS PDFs.
+        'books' => [
+            'driver' => 's3',
+            'key' => env('BOOKS_SPACES_KEY'),
+            'secret' => env('BOOKS_SPACES_SECRET'),
+            'region' => env('BOOKS_SPACES_REGION', 'syd1'),
+            'bucket' => env('BOOKS_SPACES_BUCKET'),
+            'endpoint' => env('BOOKS_SPACES_ENDPOINT'),
+            'url' => env('BOOKS_SPACES_URL'),
+            'use_path_style_endpoint' => false,
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*

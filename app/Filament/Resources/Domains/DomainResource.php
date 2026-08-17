@@ -17,6 +17,11 @@ use Filament\Tables\Table;
 
 class DomainResource extends Resource
 {
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->canAccessBilling() ?? false;
+    }
     protected static ?string $model = Domain::class;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
     protected static UnitEnum|string|null $navigationGroup = 'Admin';
