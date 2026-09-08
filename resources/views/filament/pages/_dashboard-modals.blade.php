@@ -64,7 +64,7 @@
             <h3 class="font-semibold mb-2 text-gray-200">Domains</h3>
 
             @forelse ($modalRenewals['domains'] as $d)
-                <div class="p-4 mb-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100">
+                <div wire:key="renewal-domain-{{ $d['id'] }}" class="p-4 mb-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100">
                     <div class="font-semibold text-lg">{{ $d['name'] }}</div>
                     <div class="text-sm text-amber-400">
                         Next renewal: {{ \Carbon\Carbon::parse($d['next_renewal'])->format('d M Y') }}
@@ -80,7 +80,7 @@
             <h3 class="font-semibold mb-2 text-gray-200">Hosting</h3>
 
             @forelse ($modalRenewals['hosting'] as $h)
-                <div class="p-4 mb-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100">
+                <div wire:key="renewal-hosting-{{ $h['id'] }}" class="p-4 mb-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100">
                     <div class="font-semibold text-lg">{{ $h['name'] }}</div>
                     <div class="text-sm text-amber-400">
                         Next renewal: {{ \Carbon\Carbon::parse($h['next_renewal'])->format('d M Y') }}

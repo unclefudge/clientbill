@@ -69,7 +69,7 @@
         </x-filament::card>
 
         @if (auth()->user()?->canAccessBooks())
-            <livewire:books-dashboard-widget />
+            @livewire('books-dashboard-widget', [], key('invoice-dashboard-books-widget'))
         @endif
     </div>
 
