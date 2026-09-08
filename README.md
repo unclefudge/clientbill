@@ -36,6 +36,15 @@ Create the local environment file and application key:
 cp .env.example .env
 php artisan key:generate
 ```
+Update the application and database settings in `.env`:
+
+```dotenv
+APP_NAME=ClientBill
+APP_URL=http://clientbill.test
+DB_DATABASE=clientbill
+```
+
+Adjust the database username and password if your local MySQL configuration requires them.
 
 Create a local MySQL database, then configure the database connection in `.env`.
 
