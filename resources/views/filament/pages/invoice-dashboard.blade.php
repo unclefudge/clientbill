@@ -49,7 +49,7 @@
         </x-filament::card>
 
         {{-- Unpaid Invoices Widget --}}
-        <x-filament::card class="transition hover:-translate-y-0.5 hover:border-sky-400/50">
+        <x-filament::card wire:click="viewUnpaidInvoices" class="hover:cursor-pointer transition hover:-translate-y-0.5 hover:border-sky-400/50">
             <div class="flex flex-col justify-between h-full">
 
                 <div class="flex items-start gap-4">

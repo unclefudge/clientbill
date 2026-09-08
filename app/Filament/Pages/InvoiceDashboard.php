@@ -45,6 +45,7 @@ class InvoiceDashboard extends Page implements HasSchemas
     public array $suggestions = [];
     public array $modalEntries = [];
     public array $modalRenewals = ['domains' => [], 'hosting' => [],];
+    public array $modalInvoices = [];
     public ?string $modalClientName = null;
     public ?int $modalClientId = null;
 
@@ -184,6 +185,35 @@ class InvoiceDashboard extends Page implements HasSchemas
 
         // 5) Open modal
         $this->dispatch('open-modal', id: 'renewalsModal');
+    }
+
+    public function viewUnpaidInvoices(): void
+    {
+        $today = now('Australia/Hobart')->startOfDay();
+
+        $this->modalInvoices = Invoice::query()
+            ->where('status', 'sent')
+            ->with('client')
+            ->orderByRaw('due_date IS NULL')
+            ->orderBy('due_date')
+            ->get()
+            ->map(function (Invoice $invoice) use ($today): array {
+                $dueDate = $invoice->due_date?->copy()->startOfDay();
+                $isOverdue = $dueDate?->lt($today) ?? false;
+
+                return [
+                    'id' => $invoice->id,
+                    'client_name' => $invoice->client?->name ?? 'Unknown client',
+                    'issue_date' => $invoice->issue_date?->format('j M Y'),
+                    'due_date' => $dueDate?->format('j M Y'),
+                    'total' => (float) $invoice->total,
+                    'is_overdue' => $isOverdue,
+                    'days_overdue' => $isOverdue ? $dueDate->diffInDays($today) : 0,
+                ];
+            })
+            ->all();
+
+        $this->dispatch('open-modal', id: 'unpaidInvoicesModal');
     }
 
 

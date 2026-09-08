@@ -94,6 +94,58 @@
     </div>
 </x-filament::modal>
 
+{{-- ============================= --}}
+{{-- UNPAID INVOICES MODAL --}}
+{{-- ============================= --}}
+<x-filament::modal id="unpaidInvoicesModal" width="4xl">
+    <x-slot name="heading">Unpaid Invoices</x-slot>
+
+    <div class="space-y-3 max-h-[70vh] overflow-y-auto">
+        @forelse ($modalInvoices as $invoice)
+            <a
+                href="{{ url('/invoice/' . $invoice['id']) }}"
+                wire:navigate
+                wire:key="unpaid-invoice-{{ $invoice['id'] }}"
+                class="grid grid-cols-1 gap-3 rounded-lg border border-gray-700 bg-gray-800 p-4 text-gray-100 transition hover:border-primary-500 md:grid-cols-12 md:items-center"
+            >
+                <div class="md:col-span-4">
+                    <div class="font-semibold">{{ $invoice['client_name'] }}</div>
+                    <div class="text-xs text-gray-400">Invoice #{{ $invoice['id'] }}</div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <div class="text-xs text-gray-400">Issued</div>
+                    <div class="text-sm">{{ $invoice['issue_date'] ?? '—' }}</div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <div class="text-xs text-gray-400">Due</div>
+                    <div class="text-sm">{{ $invoice['due_date'] ?? '—' }}</div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <div class="text-xs text-gray-400">Amount</div>
+                    <div class="font-semibold">${{ number_format($invoice['total'], 2) }}</div>
+                </div>
+
+                <div class="md:col-span-2 md:text-right">
+                    @if ($invoice['is_overdue'])
+                        <x-filament::badge color="danger">
+                            {{ $invoice['days_overdue'] }} {{ str('day')->plural($invoice['days_overdue']) }} overdue
+                        </x-filament::badge>
+                    @else
+                        <x-filament::badge color="warning">Unpaid</x-filament::badge>
+                    @endif
+                </div>
+            </a>
+        @empty
+            <div class="rounded-lg border border-gray-700 bg-gray-800 p-6 text-center text-sm text-gray-400">
+                There are no unpaid invoices.
+            </div>
+        @endforelse
+    </div>
+</x-filament::modal>
+
 {{-- Create Invoice --}}
 <x-filament::modal id="createInvoiceModal" width="md">
     <x-slot name="heading" class="bg-primary-500" style="background: #ff0000"><h1 class="text-2xl md:text-3xl font-bold">Create Invoice</h1></x-slot>

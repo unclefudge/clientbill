@@ -1,5 +1,7 @@
-@if ($businessId)
+<div @class(['h-full' => $businessId, 'hidden' => ! $businessId])>
+    @if ($businessId)
     <x-filament::card @class([
+        'h-full',
         'transition hover:-translate-y-0.5',
         'border-danger-400/50 hover:border-danger-400' => $attentionStatus === 'overdue',
         'border-warning-400/50 hover:border-warning-400' => $attentionStatus === 'due_soon',
@@ -53,4 +55,5 @@
             </div>
         </div>
     </x-filament::card>
-@endif
+    @endif
+</div>
