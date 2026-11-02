@@ -197,7 +197,7 @@
         </div>
 
         <x-books.select width="w-full lg:w-56" model="categoryFilter" :value="$categoryFilter" allow-empty empty-label="All categories"
-                        :options="$this->filterCategories->mapWithKeys(fn ($category) => [$category->id => $category->name . ($category->active ? '' : ' (inactive)')])->all()"/>
+                        :options="$this->filterCategories->mapWithKeys(fn ($category) => [$category->id => (match ($category->type) { 'income' => 'I:', 'expense' => 'O:', default => 'Other:' }) . $category->name . ($category->active ? '' : ' (inactive)')])->all()"/>
 
         <div class="min-w-0 flex-1">
             <x-filament::input.wrapper>
