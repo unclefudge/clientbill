@@ -116,7 +116,7 @@ class BooksTransactions extends BookPage
             } else {
                 $usedCategoryIds->whereRaw('1 = 0');
             }
-        }  
+        }
 
         return BookCategory::query()
             ->where('book_business_id', $businessId)
