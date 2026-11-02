@@ -68,12 +68,66 @@ class BooksTransactions extends BookPage
         if ($this->financialYearFilter === 'all') {
             $this->periodFilter = 'all';
         }
+
+        $this->clearUnavailableCategoryFilter();
+    }
+
+    public function updatedDirectionFilter(): void
+    {
+        $this->clearUnavailableCategoryFilter();
+    }
+
+    protected function clearUnavailableCategoryFilter(): void
+    {
+        unset($this->filterCategories);
+
+        if ($this->categoryFilter && ! $this->filterCategories->contains('id', $this->categoryFilter)) {
+            $this->categoryFilter = null;
+        }
     }
 
     public function getCategoriesProperty()
     {
         return BookCategory::query()
             ->where('book_business_id', $this->getBookBusiness()->id)
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function getFilterCategoriesProperty()
+    {
+        $businessId = $this->getBookBusiness()->id;
+
+        // Historical categories depend on the whole financial year, not the
+        // selected quarter, search text, or category filter itself.
+        $usedCategoryIds = BookTransaction::query()
+            ->select('book_category_id')
+            ->where('book_business_id', $businessId)
+            ->whereNotNull('book_category_id');
+
+        if ($this->financialYearFilter !== 'all') {
+            $financialYear = $this->financialYears->firstWhere('id', (int) $this->financialYearFilter);
+
+            if ($financialYear) {
+                $usedCategoryIds->whereBetween('transaction_date', [
+                    $financialYear->start_date->toDateString(),
+                    $financialYear->end_date->toDateString(),
+                ]);
+            } else {
+                $usedCategoryIds->whereRaw('1 = 0');
+            }
+        }
+
+        return BookCategory::query()
+            ->where('book_business_id', $businessId)
+            ->when(
+                in_array($this->directionFilter, ['income', 'expense'], true),
+                fn (Builder $query) => $query->whereIn('type', [$this->directionFilter, 'other']),
+            )
+            ->where(function (Builder $query) use ($usedCategoryIds): void {
+                $query->where('active', true)
+                    ->orWhereIn('id', $usedCategoryIds);
+            })
             ->orderBy('name')
             ->get();
     }
